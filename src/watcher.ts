@@ -1,9 +1,24 @@
-import { NS, ProcessInfo } from "@ns";
+import { NS, ProcessInfo } from '@ns';
 
+const getHash = (input: string): number => {
+  let hash = 0;
+  let i;
+  let chr;
+  if (input.length === 0) return hash;
+  // eslint-disable-next-line no-plusplus
+  for (i = 0; i < input.length; i++) {
+    chr = input.charCodeAt(i);
+    // eslint-disable-next-line no-bitwise
+    hash = (hash << 5) - hash + chr;
+    // eslint-disable-next-line no-bitwise
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+};
 // eslint-disable-next-line import/prefer-default-export
 export async function main(ns: NS): Promise<void> {
   const hashes: Record<string, number> = {};
-  const files = ns.ls("home", ".js");
+  const files = ns.ls('home', '.js');
 
   for (const file of files) {
     const contents = ns.read(file);
@@ -37,18 +52,3 @@ export async function main(ns: NS): Promise<void> {
     await ns.sleep(1000);
   }
 }
-
-const getHash = (input: string): number => {
-  let hash = 0;
-  let i;
-  let chr;
-  if (input.length === 0) return hash;
-  for (i = 0; i < input.length; i++) {
-    chr = input.charCodeAt(i);
-    // eslint-disable-next-line no-bitwise
-    hash = (hash << 5) - hash + chr;
-    // eslint-disable-next-line no-bitwise
-    hash |= 0; // Convert to 32bit integer
-  }
-  return hash;
-};

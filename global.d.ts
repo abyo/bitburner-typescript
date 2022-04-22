@@ -1,4 +1,4 @@
-import * as bitburner from "./NetscriptDefinitions";
+import * as bitburner from './NetscriptDefinitions';
 
 export {};
 
