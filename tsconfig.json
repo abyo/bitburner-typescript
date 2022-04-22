@@ -2,14 +2,23 @@
   "include": [
     "NetscriptDefinitions.d.ts",
     "global.d.ts",
-    "src/**/*",
+    "src/**/*.ts",
   ],
   "compilerOptions": {
-    "module": "esnext",
-    "target": "esnext",
+    "module": "CommonJS",
+    "target": "ES2020",
+    "lib": ["ESNext"],
     "moduleResolution": "node",
     "noImplicitReturns": true,
+    "noUnusedLocals": true,
     "noImplicitThis": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "newLine": "lf",
+    "pretty": true,
+    "removeComments": true,
     "esModuleInterop": true,
     "inlineSourceMap": true,
     "sourceRoot": "http://localhost:8000/sources/",
@@ -18,12 +27,10 @@
     "outDir": "dist/",
     "baseUrl": "src/",
     "paths": {
-      "/*": [
-        "*"
-      ],
-      "@ns": [
-        "../NetscriptDefinitions.d.ts"
-      ]
+      "src/*": ["src/*"],
+      "@root/*": ["."],
+      "/*": ["*"],
+      "@ns": ["../NetscriptDefinitions.d.ts"]
     }
   }
 }

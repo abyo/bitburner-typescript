@@ -8,14 +8,9 @@ function range(start: number, end: number, step = 1): number[] {
   return arr;
 }
 
-function calculateHnetMoneyRate(
-  level: number,
-  ram: number,
-  cores: number,
-  mult: number
-): number {
+function calculateHnetMoneyRate(level: number, ram: number, cores: number, mult: number): number {
   const levelMult = level * 1.5;
-  const ramMult = Math.pow(1.035, ram - 1);
+  const ramMult = 1.035 ** (ram - 1);
   const coresMult = (cores + 5) / 6;
   return levelMult * ramMult * coresMult * mult;
 }
@@ -47,7 +42,7 @@ function calculateMedianNodeRate(ns: NS, nodes: number[]): number {
   return nodeMedianRate;
 }
 
-export async function main(ns: NS): Promise<void> {
+export default async function main(ns: NS): Promise<void> {
   ns.disableLog("sleep");
 
   while (true) {
@@ -72,12 +67,9 @@ export async function main(ns: NS): Promise<void> {
       const ramUpgradeCost = ns.hacknet.getRamUpgradeCost(node, 1);
       const coreUpgradeCost = ns.hacknet.getCoreUpgradeCost(node, 1);
 
-      const levelUpgradeRate =
-        calculateHnetMoneyRate(level + 1, ram, cores, playerMult) - production;
-      const ramUpgradeRate =
-        calculateHnetMoneyRate(level, ram + 1, cores, playerMult) - production;
-      const coreUpgradeRate =
-        calculateHnetMoneyRate(level, ram, cores + 1, playerMult) - production;
+      const levelUpgradeRate = calculateHnetMoneyRate(level + 1, ram, cores, playerMult) - production;
+      const ramUpgradeRate = calculateHnetMoneyRate(level, ram + 1, cores, playerMult) - production;
+      const coreUpgradeRate = calculateHnetMoneyRate(level, ram, cores + 1, playerMult) - production;
 
       nodeStats.push(
         {
@@ -104,8 +96,7 @@ export async function main(ns: NS): Promise<void> {
     nodeStats.sort((a, b) => b.ratio - a.ratio);
     const upgrade = nodeStats[0];
 
-    if (upgrade.cost > playerMoney)
-      ns.print("Not enough money for the upgrade (hacknet)!");
+    if (upgrade.cost > playerMoney) ns.print("Not enough money for the upgrade (hacknet)!");
 
     if (upgrade.name === "level") {
       ns.hacknet.upgradeLevel(upgrade.core as number, 1);
@@ -115,8 +106,6 @@ export async function main(ns: NS): Promise<void> {
       ns.hacknet.upgradeCore(upgrade.core as number, 1);
     } else if (upgrade.name === "node") {
       ns.hacknet.purchaseNode();
-    } else {
-      continue;
     }
 
     await ns.sleep(1);
