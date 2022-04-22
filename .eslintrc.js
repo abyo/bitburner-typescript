@@ -1,4 +1,4 @@
-{
+module.exports = {
   "env": {
     "commonjs": true,
     "es2021": true,
@@ -9,11 +9,13 @@
     "airbnb-typescript/base",
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:@typescript-eslint/recommended"
   ],
   "parserOptions": {
     "ecmaVersion": 12,
-    "project": "../tsconfig.json"
+    "tsconfigRootDir": __dirname,
+    "project": "./tsconfig.json"
   },
   "root": true,
   "parser": "@typescript-eslint/parser",

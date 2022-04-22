@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { NS, ProcessInfo } from '@ns';
 
 const getHash = (input: string): number => {
@@ -5,17 +6,13 @@ const getHash = (input: string): number => {
   let i;
   let chr;
   if (input.length === 0) return hash;
-  // eslint-disable-next-line no-plusplus
   for (i = 0; i < input.length; i++) {
     chr = input.charCodeAt(i);
-    // eslint-disable-next-line no-bitwise
     hash = (hash << 5) - hash + chr;
-    // eslint-disable-next-line no-bitwise
     hash |= 0; // Convert to 32bit integer
   }
   return hash;
 };
-// eslint-disable-next-line import/prefer-default-export
 export async function main(ns: NS): Promise<void> {
   const hashes: Record<string, number> = {};
   const files = ns.ls('home', '.js');

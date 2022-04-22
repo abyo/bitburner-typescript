@@ -3,11 +3,14 @@
     "NetscriptDefinitions.d.ts",
     "global.d.ts",
     "src/**/*.ts",
+    "eslintrc.js"
   ],
   "compilerOptions": {
     "module": "CommonJS",
     "target": "ES2020",
-    "lib": ["ESNext"],
+    "lib": [
+      "ESNext"
+    ],
     "moduleResolution": "node",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
@@ -27,10 +30,18 @@
     "outDir": "dist/",
     "baseUrl": "src/",
     "paths": {
-      "src/*": ["src/*"],
-      "@root/*": ["."],
-      "/*": ["*"],
-      "@ns": ["../NetscriptDefinitions.d.ts"]
+      "src/*": [
+        "src/*"
+      ],
+      "@root/*": [
+        "."
+      ],
+      "/*": [
+        "*"
+      ],
+      "@ns": [
+        "../NetscriptDefinitions.d.ts"
+      ]
     }
   }
 }

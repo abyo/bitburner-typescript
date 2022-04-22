@@ -11,7 +11,7 @@ export default class BaseServer {
   get ip(): string { return this.data.ip; }
 }
 
-export async function main(ns: NS): Promise<void> {
+export function main(ns: NS): Promise<void> {
   const server = new BaseServer(ns, 'n00dles');
   ns.tprint(typeof server.data);
 }
