@@ -27,10 +27,10 @@ module.exports = {
     "no-constant-condition": "off",
     "no-restricted-syntax": "off",
     "no-await-in-loop": "off",
-    "linebreak-style": [
-      "error",
-      "windows"
-    ]
+    "import/prefer-default-export": ["error", "never"],
+    "@typescript-eslint/lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+    "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
+    "linebreak-style": ["error", "windows"]
   },
   "settings": {
     "import/parsers": {

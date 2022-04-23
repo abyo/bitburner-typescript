@@ -1,5 +1,12 @@
 import { NS } from '@ns';
 
+/**
+ * Given a start, end, and step, return an array of numbers from start to end, counting by step.
+ * @param {number} start - The first number in the sequence.
+ * @param {number} end - The end of the range.
+ * @param {number} [step=1] - The step between each number in the sequence.
+ * @returns An array of numbers from start to end, with a step of 1.
+ */
 function range(start: number, end: number, step = 1): number[] {
   const arr = [];
   for (let i = start; i < end; i += step) {
@@ -8,6 +15,14 @@ function range(start: number, end: number, step = 1): number[] {
   return arr;
 }
 
+/**
+ * Calculate the hacknet money rate
+ * @param {number} level - The level of the Hnet node.
+ * @param {number} ram - The amount of RAM you have.
+ * @param {number} cores - number of cores
+ * @param {number} mult - The multiplier for the Hnet Money Rate.
+ * @returns the rate at which the Hnet Money is being generated.
+ */
 function calcHnetMoneyRate(level: number, ram: number, cores: number, mult: number): number {
   const levelMult = level * 1.5;
   const ramMult = 1.035 ** (ram - 1);
@@ -15,7 +30,13 @@ function calcHnetMoneyRate(level: number, ram: number, cores: number, mult: numb
   return levelMult * ramMult * coresMult * mult;
 }
 
-function calculateMedianNodeRate(ns: NS, nodes: number[]): number {
+/**
+ * It calculates the median node rate of a list of nodes
+ * @param {NS} ns - NS - The namespace of the script.
+ * @param {number[]} nodes - An array of node IDs.
+ * @returns The median rate of the nodes.
+ */
+function calcMedianNodeRate(ns: NS, nodes: number[]): number {
   const totalLevel: number[] = [];
   const totalRam: number[] = [];
   const totalCore: number[] = [];
@@ -42,7 +63,7 @@ function calculateMedianNodeRate(ns: NS, nodes: number[]): number {
   return nodeMedianRate;
 }
 
-export default async function main(ns: NS): Promise<void> {
+export async function main(ns: NS): Promise<void> {
   ns.disableLog('sleep');
 
   while (true) {
@@ -52,7 +73,7 @@ export default async function main(ns: NS): Promise<void> {
     const nodeStats = [];
 
     const nodePurchaseCost = ns.hacknet.getPurchaseNodeCost();
-    const nodePurchaseRate = calculateMedianNodeRate(ns, nodes);
+    const nodePurchaseRate = calcMedianNodeRate(ns, nodes);
 
     nodeStats.push({
       name: 'node',

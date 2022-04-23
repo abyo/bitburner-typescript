@@ -11,9 +11,7 @@ import { NS } from '@ns';
  */
 function getServersList(ns: NS, currentServer = 'home', set = new Set<string>()): string[] {
   let serverConnections: string[] = ns.scan(currentServer);
-  // filter connections that aren't in the set
   serverConnections = serverConnections.filter((s) => !set.has(s));
-  // add a for each loop to add all new connections to the set
   serverConnections.forEach((server) => {
     set.add(server);
     return getServersList(ns, server, set);
@@ -34,12 +32,13 @@ function getThreadCount(ns: NS, hostname: string, scriptRamUsage: number): numbe
   return Math.floor(usableRam / scriptRamUsage);
 }
 
-export default async function main(ns: NS): Promise<void> {
-  ns.disableLog('ALL');
+export async function main(ns: NS): Promise<void> {
+  ns.disableLog('sleep');
   const servers = getServersList(ns);
 
   for (const server of servers) {
     await ns.scp(['/bin/grow.js', '/bin/weaken.js', '/bin/hack.js'], 'home', server);
+    await ns.sleep(10);
   }
 
   while (true) {
@@ -62,7 +61,6 @@ export default async function main(ns: NS): Promise<void> {
           if (availableThreads > 0 && canHack) ns.exec('bin/hack.js', server, availableThreads, server);
         }
       } else {
-        // try to nuke the server, if it fails, try to open the ports
         try {
           ns.nuke(server);
         } catch (e) {
@@ -70,7 +68,6 @@ export default async function main(ns: NS): Promise<void> {
         }
 
         try {
-          // don't write this one at the start
           ns.brutessh(server);
           ns.ftpcrack(server);
           ns.relaysmtp(server);
