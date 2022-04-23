@@ -27,7 +27,8 @@ module.exports = {
     "no-constant-condition": "off",
     "no-restricted-syntax": "off",
     "no-await-in-loop": "off",
-    "import/prefer-default-export": ["error", "never"],
+    "import/no-absolute-path": "off",
+    "import/prefer-default-export": "off",
     "@typescript-eslint/lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
     "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
     "linebreak-style": ["error", "windows"]

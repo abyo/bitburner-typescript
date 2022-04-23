@@ -1,4 +1,5 @@
 import { NS } from '@ns';
+import { ServerInfo } from '/lib/server';
 
 /**
  * The function takes the current server and a set of servers. It then scans the current
@@ -20,62 +21,38 @@ function getServersList(ns: NS, currentServer = 'home', set = new Set<string>())
   return Array.from(set.keys());
 }
 
-/**
- * Given a hostname, and script RAM usage, return the number of threads that can be ran
- * @param {NS} ns - Netscript API.
- * @param {string} hostname - The hostname of the server you want to run the script on.
- * @param {number} scriptRamUsage - This is the amount of RAM that the script uses
- * @returns The number of threads that can be run on the server.
- */
-function getThreadCount(ns: NS, hostname: string, scriptRamUsage: number): number {
-  const usableRam = ns.getServerMaxRam(hostname) - ns.getServerUsedRam(hostname);
-  return Math.floor(usableRam / scriptRamUsage);
-}
-
 export async function main(ns: NS): Promise<void> {
   ns.disableLog('sleep');
   const servers = getServersList(ns);
+  const serversData = [];
 
   for (const server of servers) {
-    await ns.scp(['/bin/grow.js', '/bin/weaken.js', '/bin/hack.js'], 'home', server);
+    serversData.push(new ServerInfo(ns, server));
+  }
+
+  for (const server of serversData) {
+    await ns.scp(['/bin/grow.js', '/bin/weaken.js', '/bin/hack.js'], 'home', server.hostname);
     await ns.sleep(10);
   }
 
   while (true) {
-    for (const server of servers) {
-      // eslint-disable-next-line no-continue
-      if (server === 'home') continue;
+    for (const server of serversData) {
+      if (server.admin) {
+        const moneyThreshold = server.money.max * 0.75;
+        const securityThreshold = server.security.min + 5;
+        const canHack = ns.getHackingLevel() >= server.hackLevel;
+        let availableThreads = server.calculateThreadCount(1.75);
 
-      if (ns.hasRootAccess(server)) {
-        const moneyThreshold = ns.getServerMaxMoney(server) * 0.75;
-        const securityThreshold = ns.getServerMinSecurityLevel(server) + 5;
-        const canHack = ns.getHackingLevel() >= ns.getServerRequiredHackingLevel(server);
-        let availableThreads = getThreadCount(ns, server, 1.75);
-
-        if (ns.getServerSecurityLevel(server) > securityThreshold) {
-          if (availableThreads > 0 && canHack) ns.exec('bin/weaken.js', server, availableThreads, server);
-        } else if (ns.getServerMoneyAvailable(server) < moneyThreshold) {
-          if (availableThreads > 0 && canHack) ns.exec('bin/grow.js', server, availableThreads, server);
+        if (server.security.level > securityThreshold) {
+          if (availableThreads > 0 && canHack) ns.exec('bin/weaken.js', server.hostname, availableThreads, server.hostname);
+        } else if (server.money.available < moneyThreshold) {
+          if (availableThreads > 0 && canHack) ns.exec('bin/grow.js', server.hostname, availableThreads, server.hostname);
         } else {
-          availableThreads = getThreadCount(ns, server, 1.7);
-          if (availableThreads > 0 && canHack) ns.exec('bin/hack.js', server, availableThreads, server);
+          availableThreads = server.calculateThreadCount(1.7);
+          if (availableThreads > 0 && canHack) ns.exec('bin/hack.js', server.hostname, availableThreads, server.hostname);
         }
       } else {
-        try {
-          ns.nuke(server);
-        } catch (e) {
-          ns.print(e);
-        }
-
-        try {
-          ns.brutessh(server);
-          ns.ftpcrack(server);
-          ns.relaysmtp(server);
-          ns.httpworm(server);
-          ns.sqlinject(server);
-        } catch (e) {
-          ns.print(e);
-        }
+        server.penetrate();
       }
       await ns.sleep(1);
     }

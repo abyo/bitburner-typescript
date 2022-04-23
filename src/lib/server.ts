@@ -80,9 +80,26 @@ export class ServerInfo {
       growth: this.data.serverGrowth,
     };
   }
-}
 
-export function main(ns: NS): void {
-  const server = new ServerInfo(ns, 'n00dles');
-  ns.tprint(server.ports.required);
+  calculateThreadCount(scriptRamUsage: number): number {
+    return Math.floor(this.ram.free / scriptRamUsage);
+  }
+
+  penetrate(): void {
+    try {
+      this.ns.nuke(this.hostname);
+    } catch (e) {
+      this.ns.print(e);
+    }
+
+    try {
+      this.ns.brutessh(this.hostname);
+      this.ns.ftpcrack(this.hostname);
+      this.ns.relaysmtp(this.hostname);
+      this.ns.httpworm(this.hostname);
+      this.ns.sqlinject(this.hostname);
+    } catch (e) {
+      this.ns.print(e);
+    }
+  }
 }
