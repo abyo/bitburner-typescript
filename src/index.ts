@@ -20,12 +20,12 @@ export async function main(ns : NS) : Promise<void> {
     const serversPurchased = serversData.filter((server) => server.purchased);
     serversPurchased.sort((a, b) => a.logRam - b.logRam);
     const weakestServer = serversPurchased[0];
-    ns.tprint(weakestServer);
 
     if (homeMoney > 1e8 && weakestServer == null) {
-      ns.tprint('[+] Buying servers');
+      ns.tprint('[+] Buying Servers');
       ns.kill('scripts/boostHack.js', 'home');
       ns.run('/scripts/purchaseServers.js', 1, 1);
+      await ns.sleep(15000);
       ns.run('/scripts/boostHack.js', 1);
     }
 
@@ -33,6 +33,7 @@ export async function main(ns : NS) : Promise<void> {
       ns.tprint('[+] Upgrading servers to 512GB');
       ns.kill('scripts/boostHack.js', 'home');
       ns.run('/scripts/purchaseServers.js', 1, 2);
+      await ns.sleep(15000);
       ns.run('/scripts/boostHack.js', 1);
     }
 
@@ -40,7 +41,8 @@ export async function main(ns : NS) : Promise<void> {
       ns.tprint('[+] Upgrading servers to 4TB');
       ns.kill('scripts/boostHack.js', 'home');
       ns.run('/scripts/purchaseServers.js', 1, 3);
-      ns.run('/scripts/getMoney.js', 1);
+      await ns.sleep(15000);
+      ns.run('/scripts/getMoney.js', 1, 'netlink');
     }
 
     await ns.sleep(15000);

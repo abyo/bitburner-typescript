@@ -6,7 +6,10 @@ export async function main(ns: NS): Promise<void> {
   ns.disableLog('sleep');
   const servers = getServersList(ns);
   const serversData = [];
-  const target: ServerInfo;
+  const target: ServerInfo = new ServerInfo(ns, ns.args[0]);
+  // target = new ServerInfo(ns, 'netlink');
+  // target = new ServerInfo(ns, 'zb-def');
+  // target = new ServerInfo(ns, 'defcomm');
 
   for (const server of servers) {
     serversData.push(new ServerInfo(ns, server));
@@ -15,14 +18,6 @@ export async function main(ns: NS): Promise<void> {
   for (const server of serversData) {
     await ns.scp(['/bin/grow.js', '/bin/weaken.js', '/bin/hack.js'], 'home', server.hostname);
     await ns.sleep(10);
-  }
-
-  if (ns.fileExists('HTTPWorm.exe')) {
-    target = new ServerInfo(ns, 'zb-def');
-  } else if (ns.fileExists('SQLInject.exe')) {
-    target = new ServerInfo(ns, 'defcomm');
-  } else {
-    target = new ServerInfo(ns, 'netlink');
   }
 
   while (true) {
