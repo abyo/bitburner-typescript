@@ -1,32 +1,7 @@
 import { NS, Server } from '@ns';
-
-interface Ports {
-  required: number
-  open: number
-  ftp: boolean
-  http: boolean
-  smtp: boolean
-  sql: boolean
-  ssh: boolean
-}
-
-interface Ram {
-  used: number
-  max: number
-  free: number
-}
-
-interface ServerSecurity {
-  level: number
-  base: number
-  min: number
-}
-
-interface ServerMoney {
-  available: number
-  max: number
-  growth: number
-}
+import {
+  ServerMoney, ServerRam, ServerPorts, ServerSecurity,
+} from '/compiler/types';
 
 export class ServerInfo {
   constructor(public ns: NS, public host: string) {
@@ -42,10 +17,11 @@ export class ServerInfo {
   get organization(): string { return this.data.organizationName; }
   get connected(): boolean { return this.data.isConnectedTo; }
   get backdoor(): boolean { return this.data.backdoorInstalled; }
+  get logRam(): number { return Math.max(0, Math.log2(this.data.maxRam)); }
   get purchased(): boolean { return (this.data.purchasedByPlayer && this.data.hostname !== 'home'); }
   get hackLevel(): number { return this.data.requiredHackingSkill; }
 
-  get ports(): Ports {
+  get ports(): ServerPorts {
     return {
       required: this.data.numOpenPortsRequired,
       open: this.data.openPortCount,
@@ -57,7 +33,7 @@ export class ServerInfo {
     };
   }
 
-  get ram(): Ram {
+  get ram(): ServerRam {
     return {
       used: this.data.ramUsed,
       max: this.data.maxRam,

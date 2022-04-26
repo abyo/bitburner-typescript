@@ -16,23 +16,21 @@ export async function main(ns: NS): Promise<void> {
     await ns.sleep(10);
   }
 
-  const target = new ServerInfo(ns, 'zb-def');
-
   while (true) {
     for (const server of serversData) {
-      if (server.admin && target.admin) {
-        const moneyThreshold = target.money.max * 0.75;
-        const securityThreshold = target.security.min + 5;
+      if (server.admin) {
+        const moneyThreshold = server.money.max * 0.75;
+        const securityThreshold = server.security.min + 5;
         const canHack = ns.getHackingLevel() >= server.hackLevel;
         let availableThreads = server.calculateThreadCount(1.75);
 
-        if (target.security.level > securityThreshold) {
-          if (availableThreads > 0 && canHack) ns.exec('bin/weaken.js', server.hostname, availableThreads, target.hostname);
-        } else if (target.money.available < moneyThreshold) {
-          if (availableThreads > 0 && canHack) ns.exec('bin/grow.js', server.hostname, availableThreads, target.hostname);
+        if (server.security.level > securityThreshold) {
+          if (availableThreads > 0 && canHack) ns.exec('bin/weaken.js', server.hostname, availableThreads, server.hostname);
+        } else if (server.money.available < moneyThreshold) {
+          if (availableThreads > 0 && canHack) ns.exec('bin/grow.js', server.hostname, availableThreads, server.hostname);
         } else {
           availableThreads = server.calculateThreadCount(1.7);
-          if (availableThreads > 0 && canHack) ns.exec('bin/hack.js', server.hostname, availableThreads, target.hostname);
+          if (availableThreads > 0 && canHack) ns.exec('bin/hack.js', server.hostname, availableThreads, server.hostname);
         }
       } else {
         server.penetrate();
