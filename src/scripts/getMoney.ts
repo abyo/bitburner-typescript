@@ -6,6 +6,7 @@ export async function main(ns: NS): Promise<void> {
   ns.disableLog('sleep');
   const servers = getServersList(ns);
   const serversData = [];
+  const target: ServerInfo;
 
   for (const server of servers) {
     serversData.push(new ServerInfo(ns, server));
@@ -16,7 +17,13 @@ export async function main(ns: NS): Promise<void> {
     await ns.sleep(10);
   }
 
-  const target = new ServerInfo(ns, 'zb-def');
+  if (ns.fileExists('HTTPWorm.exe')) {
+    target = new ServerInfo(ns, 'zb-def');
+  } else if (ns.fileExists('SQLInject.exe')) {
+    target = new ServerInfo(ns, 'defcomm');
+  } else {
+    target = new ServerInfo(ns, 'netlink');
+  }
 
   while (true) {
     for (const server of serversData) {
