@@ -7,9 +7,6 @@ export async function main(ns: NS): Promise<void> {
   const servers = getServersList(ns);
   const serversData = [];
   const target: ServerInfo = new ServerInfo(ns, <string>ns.args[0]);
-  // target = new ServerInfo(ns, 'netlink');
-  // target = new ServerInfo(ns, 'zb-def');
-  // target = new ServerInfo(ns, 'defcomm');
 
   for (const server of servers) {
     serversData.push(new ServerInfo(ns, server));

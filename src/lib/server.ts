@@ -1,6 +1,6 @@
 import { NS, Server } from '@ns';
 import {
-  ServerMoney, ServerRam, ServerPorts, ServerSecurity,
+  ServerMoney, ServerPorts, ServerRam, ServerSecurity,
 } from '/compiler/types';
 
 export class ServerInfo {
