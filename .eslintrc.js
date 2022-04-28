@@ -30,6 +30,7 @@ module.exports = {
     "import/no-absolute-path": "off",
     "import/prefer-default-export": "off",
     "@typescript-eslint/no-unused-expressions": "off",
+    "no-continue": "off",
     "@typescript-eslint/lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
     "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
     "linebreak-style": ["error", "windows"]
