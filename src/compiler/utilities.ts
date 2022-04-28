@@ -30,3 +30,33 @@ export function getServersList(ns: NS, currentServer = 'home', set = new Set<str
 
   return Array.from(set.keys());
 }
+
+/**
+ * It recursively scans the network for the target server
+ * and returns the route it took to get there
+ * https://github.com/tyrope/bitburner/blob/master/lib/netLib.js#L30-L59
+ * @param {NS} ns - The NS object
+ * @param {string} source - The server you're currently on.
+ * @param {string} target - The server you want to hack
+ * @param {string[]} servers - The list of servers you have access to.
+ * @returns The route from source to target.
+ */
+export function findServer(ns: NS, source: string, target: string, servers: string[]): string[] {
+  servers.push(source);
+
+  for (const server of ns.scan(source)) {
+    if (server === target) {
+      servers.push(server);
+      return servers;
+    }
+
+    if (!servers.includes(server)) {
+      const route = findServer(ns, server, target, servers.slice());
+      if (route[route.length - 1] === target) {
+        return route;
+      }
+    }
+  }
+
+  return servers;
+}
