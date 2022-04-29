@@ -1,41 +1,48 @@
 import { NS } from '@ns';
 import { ServerInfo } from '/lib/server';
-import { getServersList } from '/compiler/utilities';
+import { getServersInfos } from '/compiler/utilities';
 
 export async function main(ns: NS): Promise<void> {
   ns.disableLog('sleep');
-  const servers = getServersList(ns);
-  const serversData = [];
+  const serversData = getServersInfos(ns);
   const target: ServerInfo = new ServerInfo(ns, <string>ns.args[0]);
-
-  for (const server of servers) {
-    serversData.push(new ServerInfo(ns, server));
-  }
 
   for (const server of serversData) {
     await ns.scp(['/bin/grow.js', '/bin/weaken.js', '/bin/hack.js'], 'home', server.hostname);
     await ns.sleep(10);
   }
 
+  const moneyThreshold = target.money.max * 0.75;
+  const securityThreshold = target.security.min + 5;
+
   while (true) {
     for (const server of serversData) {
       if (server.admin && target.admin) {
-        const moneyThreshold = target.money.max * 0.75;
-        const securityThreshold = target.security.min + 5;
-        const canHack = ns.getHackingLevel() >= server.hackLevel;
+        let targetMoney = target.money.available;
+        if (targetMoney <= 0) targetMoney = 1;
+
+        let weakenThreads = Math.ceil((target.security.level - target.security.min) / ns.weakenAnalyze(1));
+        let hackThreads = Math.ceil(ns.hackAnalyzeThreads(target.hostname, targetMoney));
+        let growThreads = Math.ceil(ns.growthAnalyze(target.hostname, target.money.max / targetMoney));
         let availableThreads = server.calculateThreadCount(1.75);
 
+        const canHack = ns.getHackingLevel() >= server.hackLevel;
+
         if (target.security.level > securityThreshold) {
-          if (availableThreads > 0 && canHack) ns.exec('bin/weaken.js', server.hostname, availableThreads, target.hostname);
+          weakenThreads = Math.min(availableThreads, weakenThreads);
+          if (availableThreads > 0 && canHack) ns.exec('bin/weaken.js', server.hostname, weakenThreads, target.hostname);
         } else if (target.money.available < moneyThreshold) {
-          if (availableThreads > 0 && canHack) ns.exec('bin/grow.js', server.hostname, availableThreads, target.hostname);
+          growThreads = Math.min(availableThreads, growThreads);
+          if (availableThreads > 0 && canHack) ns.exec('bin/grow.js', server.hostname, growThreads, target.hostname);
         } else {
-          availableThreads = server.calculateThreadCount(1.7);
-          if (availableThreads > 0 && canHack) ns.exec('bin/hack.js', server.hostname, availableThreads, target.hostname);
+          availableThreads = server.calculateThreadCount(1.70);
+          hackThreads = Math.min(availableThreads, hackThreads);
+          if (availableThreads > 0 && canHack) ns.exec('bin/hack.js', server.hostname, hackThreads, target.hostname);
         }
       } else {
         server.penetrate();
       }
+
       await ns.sleep(1);
     }
   }
