@@ -1,6 +1,5 @@
 import { NS } from '@ns';
-import { ServerInfo } from '/lib/server';
-import { getServersList, generateRandomString } from '/compiler/utilities';
+import { getServersInfos, generateRandomString } from '/compiler/utilities';
 
 function removeServer(ns: NS, server: string): void {
   ns.deleteServer(server);
@@ -13,16 +12,11 @@ function buyServer(ns: NS, ram: number): string {
 }
 
 export function main(ns : NS) : void {
-  const servers = getServersList(ns);
-  const serversData = [];
-
-  for (const server of servers) {
-    serversData.push(new ServerInfo(ns, server));
-  }
+  const serversData = getServersInfos(ns);
 
   const serversPurchased = serversData.filter((server) => server.purchased);
 
-  if (ns.args[0] === 2 || ns.args[0] === 3) {
+  if (ns.args[0] === 2 || ns.args[0] === 3 || ns.args[0] === 4 || ns.args[0] === 5) {
     for (const server of serversPurchased) {
       ns.killall(server.hostname);
       removeServer(ns, server.hostname);
@@ -36,6 +30,10 @@ export function main(ns : NS) : void {
       buyServer(ns, 9);
     } else if (ns.args[0] === 3) {
       buyServer(ns, 12);
+    } else if (ns.args[0] === 4) {
+      buyServer(ns, 15);
+    } else if (ns.args[0] === 5) {
+      buyServer(ns, 18);
     } else {
       buyServer(ns, 20);
     }
