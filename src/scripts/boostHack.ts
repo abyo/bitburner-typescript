@@ -1,15 +1,9 @@
 import { NS } from '@ns';
-import { ServerInfo } from '/lib/server';
-import { getServersList } from '/compiler/utilities';
+import { getServersInfos } from '/compiler/utilities';
 
 export async function main(ns: NS): Promise<void> {
   ns.disableLog('sleep');
-  const servers = getServersList(ns);
-  const serversData = [];
-
-  for (const server of servers) {
-    serversData.push(new ServerInfo(ns, server));
-  }
+  const serversData = getServersInfos(ns);
 
   for (const server of serversData) {
     await ns.scp(['/bin/grow.js', '/bin/weaken.js', '/bin/hack.js'], 'home', server.hostname);
