@@ -67,7 +67,7 @@ export async function main(ns: NS): Promise<void> {
   ns.disableLog('sleep');
   let totalNodes = ns.hacknet.numNodes();
 
-  while (totalNodes < 25) {
+  while (totalNodes < 26) {
     totalNodes = ns.hacknet.numNodes();
     const playerMult = ns.getPlayer().hacknet_node_money_mult;
     const playerMoney = ns.getPlayer().money;
