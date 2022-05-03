@@ -16,14 +16,14 @@ export function main(ns : NS) : void {
 
   const serversPurchased = serversData.filter((server) => server.purchased);
 
-  if (ns.args[0] === 2 || ns.args[0] === 3 || ns.args[0] === 4 || ns.args[0] === 5) {
+  if (ns.args[0] === 2 || ns.args[0] === 3 || ns.args[0] === 4 || ns.args[0] === 5 || ns.args[0] === 6) {
     for (const server of serversPurchased) {
       ns.killall(server.hostname);
       removeServer(ns, server.hostname);
     }
   }
 
-  for (let i = 0; i < 26; i += 1) {
+  for (let i = 0; i < 25; i += 1) {
     if (ns.args[0] === 1) {
       buyServer(ns, 6);
     } else if (ns.args[0] === 2) {
