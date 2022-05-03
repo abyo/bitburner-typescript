@@ -6,7 +6,7 @@ export async function main(ns: NS): Promise<void> {
   const serversData = getServersInfos(ns);
 
   for (const server of serversData) {
-    await ns.scp(['/bin/grow.js', '/bin/weaken.js', '/bin/hack.js'], 'home', server.hostname);
+    await ns.scp(['/bin/loop/grow.js', '/bin/loop/weaken.js', '/bin/loop/hack.js'], 'home', server.hostname);
     await ns.sleep(10);
   }
 
@@ -19,12 +19,12 @@ export async function main(ns: NS): Promise<void> {
         let availableThreads = server.calculateThreadCount(1.75);
 
         if (server.security.level > securityThreshold) {
-          if (availableThreads > 0 && canHack) ns.exec('bin/weaken.js', server.hostname, availableThreads, server.hostname);
+          if (availableThreads > 0 && canHack) ns.exec('bin/loop/weaken.js', server.hostname, availableThreads, server.hostname);
         } else if (server.money.available < moneyThreshold) {
-          if (availableThreads > 0 && canHack) ns.exec('bin/grow.js', server.hostname, availableThreads, server.hostname);
+          if (availableThreads > 0 && canHack) ns.exec('bin/loop/grow.js', server.hostname, availableThreads, server.hostname);
         } else {
           availableThreads = server.calculateThreadCount(1.7);
-          if (availableThreads > 0 && canHack) ns.exec('bin/hack.js', server.hostname, availableThreads, server.hostname);
+          if (availableThreads > 0 && canHack) ns.exec('bin/loop/hack.js', server.hostname, availableThreads, server.hostname);
         }
       } else {
         server.penetrate();
