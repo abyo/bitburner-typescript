@@ -30,14 +30,14 @@ export async function main(ns: NS): Promise<void> {
 
         if (target.security.level > securityThreshold) {
           weakenThreads = Math.min(availableThreads, weakenThreads);
-          if (availableThreads > 0 && canHack) ns.exec('bin/loop/weaken.js', server.hostname, weakenThreads, target.hostname);
+          if (weakenThreads > 0 && canHack) ns.exec('bin/loop/weaken.js', server.hostname, weakenThreads, target.hostname);
         } else if (target.money.available < moneyThreshold) {
           growThreads = Math.min(availableThreads, growThreads);
-          if (availableThreads > 0 && canHack) ns.exec('bin/loop/grow.js', server.hostname, growThreads, target.hostname);
+          if (growThreads > 0 && canHack) ns.exec('bin/loop/grow.js', server.hostname, growThreads, target.hostname);
         } else {
           availableThreads = server.calculateThreadCount(1.70);
           hackThreads = Math.min(availableThreads, hackThreads);
-          if (availableThreads > 0 && canHack) ns.exec('bin/loop/hack.js', server.hostname, hackThreads, target.hostname);
+          if (hackThreads > 0 && canHack) ns.exec('bin/loop/hack.js', server.hostname, hackThreads, target.hostname);
         }
       } else {
         server.penetrate();

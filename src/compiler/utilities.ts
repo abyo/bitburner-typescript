@@ -124,7 +124,7 @@ export function findBestServerToHack(ns: NS): string {
   const player = ns.getPlayer();
   const serversData = getServersInfos(ns);
 
-  const data = serversData.filter((server) => !server.purchased || server.hackLevel > ns.getHackingLevel());
+  const data = serversData.filter((server) => !server.purchased && server.hackLevel <= ns.getHackingLevel() && server.money.max > 0);
 
   const serverDetails = [];
 
