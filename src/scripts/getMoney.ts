@@ -1,11 +1,11 @@
 import { NS } from '@ns';
 import { ServerInfo } from '/lib/server';
-import { getServersInfos } from '/compiler/utilities';
+import { getServersInfos, findBestServerToHack } from '/compiler/utilities';
 
 export async function main(ns: NS): Promise<void> {
   ns.disableLog('sleep');
   const serversData = getServersInfos(ns);
-  const target: ServerInfo = new ServerInfo(ns, <string>ns.args[0]);
+  const target: ServerInfo = new ServerInfo(ns, findBestServerToHack(ns));
 
   for (const server of serversData) {
     await ns.scp(['/bin/grow.js', '/bin/weaken.js', '/bin/hack.js'], 'home', server.hostname);
