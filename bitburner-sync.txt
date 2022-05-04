@@ -1,0 +1,9 @@
+File used to sync with bitburner, rename to 'bitburner-sync.json'.
+Then change the authToken by your own token.
+You can change the scriptRoot too if you're using something different.
+
+{
+  "authToken": "authTokenHere",
+  "scriptRoot": "./dist",
+  "allowDelete": true
+}
