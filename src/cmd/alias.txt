@@ -1,0 +1,3 @@
+C/P the command below to add all aliases
+
+alias bscan="run cmd/better_scan.js"; alias lsl="ls . -l"; alias kas="killall; run cmd/kill_all_scripts.js;"; alias fac="run cmd/find_server.js CSEC; run cmd/find_server.js avmnite-02h; run cmd/find_server.js I.I.I.I; run cmd/find_server.js run4theh111z; run cmd/find_server.js w0r1d_d43m0n;"; alias find="run cmd/find_server.js"
