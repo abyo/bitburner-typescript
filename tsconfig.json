@@ -1,7 +1,6 @@
 {
   "include": [
-    "NetscriptDefinitions.d.ts",
-    "global.d.ts",
+    "./lib/lib.netscript.d.ts",
     "src/**/*.ts"
   ],
   "compilerOptions": {
@@ -20,7 +19,6 @@
     "removeComments": true,
     "esModuleInterop": true,
     "inlineSourceMap": true,
-    "sourceRoot": "http://localhost:8000/sources/",
     "strict": true,
     "rootDir": "src/",
     "outDir": "dist/",
@@ -36,7 +34,7 @@
         "*"
       ],
       "@ns": [
-        "../NetscriptDefinitions.d.ts"
+        "../lib/lib.netscript.d.ts"
       ]
     }
   }

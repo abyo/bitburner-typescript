@@ -1,7 +1,32 @@
 import { NS, Server } from '@ns';
-import {
-  ServerMoney, ServerPorts, ServerRam, ServerSecurity,
-} from '/compiler/types';
+
+interface ServerPorts {
+  required: number
+  open: number
+  ftp: boolean
+  http: boolean
+  smtp: boolean
+  sql: boolean
+  ssh: boolean
+}
+
+interface ServerRam {
+  used: number
+  max: number
+  free: number
+}
+
+interface ServerSecurity {
+  level: number
+  base: number
+  min: number
+}
+
+interface ServerMoney {
+  available: number
+  max: number
+  growth: number
+}
 
 export class ServerInfo {
   constructor(public ns: NS, public host: string) {
