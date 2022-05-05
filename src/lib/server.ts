@@ -28,6 +28,8 @@ interface ServerMoney {
   growth: number
 }
 
+const reservedRam = 20;
+
 export class ServerInfo {
   constructor(public ns: NS, public host: string) {
     this.ns = ns;
@@ -61,8 +63,8 @@ export class ServerInfo {
   get ram(): ServerRam {
     return {
       used: this.data.ramUsed,
-      max: this.data.maxRam,
-      free: this.data.maxRam - this.data.ramUsed,
+      max: this.data.maxRam - (this.data.hostname === 'home' ? reservedRam : 0),
+      free: this.data.maxRam - this.data.ramUsed - (this.data.hostname === 'home' ? reservedRam : 0),
     };
   }
 
