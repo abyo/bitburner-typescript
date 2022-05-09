@@ -28,7 +28,7 @@ interface ServerMoney {
   growth: number
 }
 
-const reservedRam = 20;
+const reservedRam = 10;
 
 export class ServerInfo {
   constructor(public ns: NS, public host: string) {
