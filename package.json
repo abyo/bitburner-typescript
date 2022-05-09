@@ -2,10 +2,10 @@
   "name": "bitburner-abyo",
   "version": "0.1.0",
   "scripts": {
-    "watch": "npx tsc",
+    "tsc": "npx tsc",
     "lint": "eslint . --ext .ts",
     "sync": "bitburner-sync",
-    "compile": "yarn watch && yarn sync"
+    "compile": "yarn lint && yarn tsc && yarn sync"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.18.0",
